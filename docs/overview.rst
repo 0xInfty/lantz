@@ -26,7 +26,7 @@ The code is basically self explanatory, and does not differ too much of what you
 Logging
 -------
 
-While building and running your program it is invaluable to monitor its state. Lantz gives to all your drivers automatic logging.
+While building and running your program it is invaluable to monitor its state. Lantz gives automatic logging to all your drivers.
 
 The default level is logging.INFO, but if you prepend  the following lines to the previous example::
 
@@ -48,13 +48,15 @@ because no name was given. If you want to specify a name, do it at object creati
 
 Separation into multiple loggers makes finding problems easier and enables fine grained control over log output.
 
-By the way, if you are running your program from an IDE or you don't want to clutter your current terminal, you can log to a socket and view the log output in another window (even in another computer, but we leave this for latter). Open first another terminal and run::
+By the way, if you are running your program from an IDE or you don't want to clutter your current terminal, you can log to a socket and view the log output in another window (even in another computer, but we leave this for later). Open first another terminal and run::
 
     $ lantzmonitor.py -l 1
 
-(If you want a nicer user interface with filtering and searching capabilities, try LogView http://code.google.com/p/logview/)
+(If you want a nicer user interface with filtering and searching capabilities, try LogView_)
 
-To your python program, replace the logging lines by::
+.. _Logview : http://code.google.com/p/logview/
+
+To your Python program, replace the logging lines by::
 
     import logging
     from lantz import log_to_socket
@@ -62,7 +64,7 @@ To your python program, replace the logging lines by::
 
 When you run it, you will see the log appearing in the logging window.
 
-By the way, `lantzmonitor` is more than log to screen dumper. Tailored for lantz, it can display instrument specific messages as well as an on-line summary indicating the current value for each property. Hopefully, you will never need to add a print statement in your program any more!
+By the way, `lantzmonitor` is more than log to screen dumper. Tailored for Lantz, it can display instrument specific messages as well as an online summary indicating the current value for each property. Hopefully, you will never need to add a print statement in your program any more!
 
 
 Timing
@@ -70,7 +72,7 @@ Timing
 
 .. TODO Partially implemented
 
-Basic statistics of instrument related function calls are kept to facilitate bottleneck identification. While this is not as powerful as python profiler, its much easier to use within your application. You can obtain the statistics for a particular operation using::
+Basic statistics of instrument related function calls are kept to facilitate bottleneck identification. While this is not as powerful as a Python profiler, its much easier to use within your application. You can obtain the statistics for a particular operation using::
 
     fungen.timing.stats('set_frequency')
 
@@ -92,7 +94,7 @@ Similarly, you can obtain timing statistics of the getter calling::
 Cache
 -----
 
-Setting and getting drivers properties always does it in the instrument. However, accessing the instrument is time consuming and many times  you just want to a way to recall the last known value. Lantz properties carry their own cache, which can be accessed with the recall method::
+Setting and getting drivers properties is always done by the instrument. However, accessing the instrument is time consuming and many times you just want a way to recall the last known value. Lantz properties carry their own cache, which can be accessed with the `recall` method::
 
     >>> fungen.recall('amplitude')
     20 V

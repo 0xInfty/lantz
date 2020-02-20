@@ -17,16 +17,22 @@ When you use Lantz you get:
     - A comprehensive and growing library of curated and well documented
       instruments drivers.
 
-    - A really easy way write your own drivers. In less than an hour
+    - A really easy way to write your own drivers. In less than an hour
       you can write a full driver with bounds checks, useful logging,
       async capabilities and much more.
 
     - On-the-fly GUI for testing purposes.
-      Without a line of code you get for **any** driver something like this
-      (click to enlarge):
+      Without a single line of code you get for **any** driver something like this:
 
       .. thumbnail:: _static/ui-fungen.png
             :width: 20%
+            :align: center
+            :show_caption: True
+            
+            Click on image to enlarge.
+      
+      .. centered::
+      	  *Click on image to enlarge.*
 
     - Tools to quickly build beautiful, responsive and composable applications.
 
