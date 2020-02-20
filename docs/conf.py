@@ -94,7 +94,7 @@ copyright = '%s, %s' % (this_year, author)
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', 'drivers']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -140,9 +140,9 @@ driversdoc.main()
 # documentation.
 html_theme_options = {}
 
-# The name for this set of Sphinx documents.  If None, it defaults to
+# The name for this set of Sphinx documents.  If none is assigned, defaults is
 # "<project> v<release> documentation".
-html_title = None
+# html_title = 'Lantz'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 html_short_title = 'Lantz'
