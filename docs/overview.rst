@@ -28,13 +28,15 @@ Logging
 
 While building and running your program it is invaluable to monitor its state. Lantz gives automatic logging to all your drivers.
 
-The default level is logging.INFO, but if you prepend  the following lines to the previous example::
+The default level is ``logging.INFO``, but if you prepend  the following lines to the previous example::
 
     import logging
     from lantz import log_to_screen
     log_to_screen(logging.DEBUG)
 
-You will see the instance initializing and how and when each property is accessed. Loggers are organized by default with the following naming convention::
+you will see the instance initializing and how and when each property is accessed. 
+
+Loggers are organized by default with the following naming convention::
 
     lantz.<class name>.<instance name>
 
@@ -56,7 +58,7 @@ By the way, if you are running your program from an IDE or you don't want to clu
 
 .. _Logview : http://code.google.com/p/logview/
 
-To your Python program, replace the logging lines by::
+Next, in your Python program, replace the logging lines by::
 
     import logging
     from lantz import log_to_socket
@@ -64,7 +66,7 @@ To your Python program, replace the logging lines by::
 
 When you run it, you will see the log appearing in the logging window.
 
-By the way, `lantzmonitor` is more than log to screen dumper. Tailored for Lantz, it can display instrument specific messages as well as an online summary indicating the current value for each property. Hopefully, you will never need to add a print statement in your program any more!
+By the way, ``lantzmonitor.py`` contains more than just log to screen dumper. Tailored for Lantz, it can display instrument specific messages as well as an online summary indicating the current value for each property. Hopefully, you will never need to add a print statement in your program any more!
 
 
 Timing
@@ -94,7 +96,7 @@ Similarly, you can obtain timing statistics of the getter calling::
 Cache
 -----
 
-Setting and getting drivers properties is always done by the instrument. However, accessing the instrument is time consuming and many times you just want a way to recall the last known value. Lantz properties carry their own cache, which can be accessed with the `recall` method::
+Setting and getting driver properties is always done by the instrument. However, accessing the instrument is time-consuming and many times you just want a way to recall the last known value. Lantz properties carry their own cache, which can be accessed with the ``recall`` method::
 
     >>> fungen.recall('amplitude')
     20 V
@@ -105,7 +107,7 @@ You can also access multiple elements::
     {'frequency': 20 MHz, 'amplitude': 20 V}
 
 
-Using recall without arguments gets all defined feats
+In fact, using ``recall`` without arguments gets all defined feats
 
     >>> fungen.recall()
     {'frequency': 20 MHz, 'amplitude': 20 V, 'ac_mode': True }
@@ -125,9 +127,9 @@ If you are not sure that the current state of the instrument matches the cached 
 Getting and setting multiple values in one line
 -----------------------------------------------
 
-You can use the refresh method to obtain multiple values from the instrument::
+You can use the ``refresh`` method to obtain multiple values from the instrument::
 
-    >>> print(fungen.refresh('amplitude')) # is equivalent to print(fungen.amplitude)
+    >>> print(fungen.refresh('amplitude')) # Equivalent to print(fungen.amplitude)
     20 V
 
     >>> print(fungen.refresh(('frequency', 'amplitude'))) # You can refresh multiple properties at once
@@ -137,26 +139,26 @@ You can use the refresh method to obtain multiple values from the instrument::
     {'frequency': 20 MHz, 'amplitude': 20 V, 'ac_mode': True }
 
 
-The counterpart of refresh is the update method that allows you to set multiple values in a single line::
+The counterpart of ``refresh`` is the ``update`` method that allows you to set multiple values in a single line::
 
-    >>> fungen.update(ac_mode=True) # is equivalent to fungen.ac_mode = True
+    >>> fungen.update(ac_mode=True) # Equivalent to fungen.ac_mode = True
 
     >>> fungen.update({'ac_mode': True})  # Can be also used with a dictionary
 
-    >>> fungen.update(ac_mode=True, amplitude=Q(42, 'V')) # if you want to set many, just do
+    >>> fungen.update(ac_mode=True, amplitude=Q(42, 'V')) # If you want to set many, just do this
 
     >>> fungen.update({'ac_mode': True, 'amplitude': Q(42, 'V')}) # or this
 
 
-The cache is what allows to Lantz to avoid unnecessary communication with the instrument. You can overrule this check using the update method::
+The cache is what allows Lantz to avoid unnecessary communication with the instrument. You can overrule this check using the ``update`` method::
 
     >>> fungen.amplitude = Q(42, 'V')
 
-    >>> fungen.amplitude = Q(42, 'V') # No information is set to the instrument as is the value already set
+    >>> fungen.amplitude = Q(42, 'V') # Not sent to the instrument because that value is already set
 
     >>> fungen.update(amplitude=Q(42, 'V'), force=True) # The force true argument ignores cache checking
 
-This can be useful for example when the operator might change the settings using the manual controls.
+This can be useful, for example, when the operator might change the settings using the manual controls.
 
 
 Effortless asynchronous get and set
@@ -174,7 +176,7 @@ will update `ac_mode` and `amplitude` without blocking, so the print statement i
     >>> while not result1.done() and not result2.done()
     ...     DoSomething()
 
-Just like `update_async`, you can use `refresh_async` to obtain the value of one or more features. The result is again a :py:class:`concurrent.futures.Future` object whose value can be queried using the result method :py:meth:`concurrent.futures.Future.result`
+Just like ``update_async``, you can use ``refresh_async`` to obtain the value of one or more features. The result is again a :py:class:`concurrent.futures.Future` object whose value can be queried using the result method :py:meth:`concurrent.futures.Future.result`
 
     >>> fut = obj.refresh_async('eggs')
     >>> DoSomething()
@@ -190,7 +192,7 @@ Async methods accept also a callback argument to define a method that will be us
 Context manager
 ---------------
 
-If you want to send a command to an instrument only once during a particular script, you might want to make use of the context manager syntax. In the following example, the driver will be created and initialized in the first line and finalized when the `with` clause finishes even when an unhandled exception is raised::
+Since the communication is handled entirely through an instance of a class, Lantz allows you to make use of Python's `context manager`_ syntax. It might come in handy if you want to send a command to an instrument only once during a particular script, for example. In that case, the driver will be created and initialized in the first line and finalized when the `with` clause finishes even when an unhandled exception is raised::
 
     with A2023a('COM1') as fungen:
 
@@ -199,12 +201,12 @@ If you want to send a command to an instrument only once during a particular scr
         print(fungen.amplitude)
         fungen.sweep()
 
-
+.. _`context manager` : https://book.pythontips.com/en/latest/context_managers.html
 
 Units
 -----
 
-Instrumentation software need to deal with physical units, and therefore you need to deal with them. Keeping track of the units of each variable in time consuming and error prone, and derives into annoying naming practices such as `freq_in_KHz`. Lantz aims to reduce the burden of this by incorporating units using the Pint_ package. The Quantity object is abbreviated withing Lantz as `Q_` and can be imported from the root::
+Instrumentation software needs to deal with physical units, and therefore you also need to deal with them. Keeping track of the units of each variable is time-consuming and error-prone, and it derives into annoying naming practices such as `freq_in_KHz`. Lantz aims to reduce the burden of this by incorporating units using the Pint_ package. The key to this is the Pint ``Quantity`` object, which is abbreviated within Lantz as `Q_` and can be imported from the root to manage all units::
 
     from lantz import Q_
 
@@ -212,7 +214,7 @@ Instrumentation software need to deal with physical units, and therefore you nee
     value = 42 * mv # we can use the defined units like this
     thesame = Q_(42, 'mv') # or like this
 
-This makes the code a little more verbose but is worth the effort. The code is more explicit and less error prone. It also allows you to do thing like this::
+This makes the code a little more verbose but it is worth the effort. The code is more explicit and less error-prone. It also allows you to write more general code and do things like this::
 
     from lantz import Q_
 
@@ -223,7 +225,7 @@ This makes the code a little more verbose but is worth the effort. The code is m
 
         fungen.amplitude = Q_(0.05, 'V')
 
-Later you decide to change the function generator by a different one, with a different communication protocol::
+Later, if you decide to change the function generator by a different one, with a different communication protocol, you would then need something like this::
 
     from lantz import Q_
 
@@ -234,9 +236,9 @@ Later you decide to change the function generator by a different one, with a dif
 
         fungen.amplitude = Q_(0.05, 'V') # the value is converted from volts to mV inside the driver.
 
-Apart from the import, nothing has changed. In a big code base this means that you can easily replace one instrument by another.
+Apart from the import, nothing has changed. In a big code base this means that you can easily replace one instrument by another without worrying about the units requirements of each model.
 
-You might want to use the value obtained in one instrument to set another. Or you might want to use the same value in two different instruments without looking into their specific details::
+There is a lot more that can be easily achieved with this aproach. You might want to use the value obtained in one instrument to set another. Or you might want to use the same value in two different instruments without looking into their specific details::
 
     from lantz import Q_
 
@@ -254,20 +256,22 @@ You might want to use the value obtained in one instrument to set another. Or yo
         lockin.frequency = freq
 
 
-In case you are not convinced, a small technical note:
+In case you are not convinced, have you ever heard of MCO NASA's lost spacecraft? Here is a small horrifying technical note about it:
 
 .. note::
+    
+    The Mars Climate Orbiter (MCO) was launched in December 11, 1998, as part of NASA’s long-term program of robotic exploration of Mars. On September 23, 1999, the MCO mission was lost when it entered the Martian atmosphere on a lower than expected trajectory. As MCO Mishap Investigation Board (MIB) confirmed: “At the time of Mars insertion, the spacecraft trajectory was approximately 170 kilometers lower than planned.”
 
-    The MCO MIB has determined that the root cause for the loss of the MCO spacecraft was the failure to use metric units in the coding of a ground software file, “Small Forces,” used in trajectory models. Specifically, thruster performance data in English units instead of metric units was used in the software application code titled SM_FORCES (small forces). The output from the SM_FORCES application code as required by a MSOP Project Software Interface Specification (SIS) was to be in metric units of Newtonseconds (N-s). Instead, the data was reported in English units of pound-seconds (lbf-s). The Angular Momentum Desaturation (AMD) file contained the output data from the SM_FORCES software. The SIS, which was not followed, defines both the format and units of the AMD file generated by ground-based computers. Subsequent processing of the data from AMD file by the navigation software algorithm therefore, underestimated the effect on the spacecraft trajectory by a factor of 4.45, which is the required conversion factor from force in pounds to Newtons. An erroneous trajectory was computed using this incorrect data.
+    After further research, the MCO MIB has determined that “the root cause for the loss of the MCO spacecraft was the failure to use metric units in the coding of a ground software file... used in trajectory models... Specifically, thruster performance data in English units instead of metric units was used in a software application code titled SM_FORCES (small forces). The output... was to be in metric units of Newtonseconds (N-s). Instead, the data was reported in English units of pound-seconds (lbf-s)... Subsequent processing of the data... by the navigation software algorithm therefore underestimated the effect on the spacecraft trajectory by a factor of 4.45, which is the required conversion factor from force in pounds to Newtons. An erroneous trajectory was computed using this incorrect data.”
 
             `Mars Climate Orbiter Mishap Investigation Phase I Report`
-            `PDF <ftp://ftp.hq.nasa.gov/pub/pao/reports/1999/MCO_report.pdf>`_
+            `PDF <http://sunnyday.mit.edu/accidents/MCO_report.pdf>`_
 
 
 User interface
 --------------
 
-Providing a powerful GUI is an important aspect of developing an application for end user. Lantz aims to simplify the UI development by allowing you to correctly connect to `Lantz` Feats and Actions to widgets without any effort. For example, if you generate a GUI using Qt Designer::
+Providing a powerful GUI is an important aspect of developing an application for end user. Lantz aims to simplify the UI development by allowing you to correctly connect feats and actions to widgets without any effort. For example, you can generate a GUI using Qt Designer with just a few lines::
 
     # imports not shown
 
@@ -279,19 +283,20 @@ Providing a powerful GUI is an important aspect of developing an application for
 
         # Do something
 
-Additionally it provides automatic generation of Test Panels, a very useful feature when you are building or debugging a new driver::
+Additionally it provides automatic generation of test panels, a very useful feature when you are building or debugging a new driver::
 
     # imports not shown
 
     with LantzSignalGeneratorTCP() as fungen: # Instantiate the instrument
         start_test_app(inst)               # Create
 
-and you get:
+Just like that and you get:
 
 .. image:: _static/ui-fungen.png
+   :align: center
    :alt: Signal Generation Test Panel
 
-
-Check out the :ref:`tutorials` to get started!
+.. centered::
+   *If you like what you saw, check out the* :ref:`tutorials` *to get started!*
 
 .. _Pint: https://pint.readthedocs.org/
